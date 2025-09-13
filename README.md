@@ -9,14 +9,14 @@ The official Go SDK for the CheckHim phone number verification API. Verify phone
 
 ## Features
 
-- ✅ **Simple API** - Easy-to-use interface with minimal setup
-- 🌍 **Global Coverage** - Verify phone numbers from around the world  
-- 🚀 **High Performance** - Optimized for speed and reliability
-- 🔒 **Secure** - Built-in security best practices
-- 🛡️ **Error Handling** - Comprehensive error handling and recovery
-- 📊 **Rich Response Data** - Get detailed information about verified numbers
-- ⚡ **Context Support** - Full context.Context support for cancellation and timeouts
-- 🧪 **Well Tested** - Extensive test coverage with examples
+- **Simple API** - Easy-to-use interface with minimal setup
+- **Global Coverage** - Verify phone numbers from around the world  
+- **High Performance** - Optimized for speed and reliability
+- **Secure** - Built-in security best practices
+- **Error Handling** - Comprehensive error handling and recovery
+- **Rich Response Data** - Get detailed information about verified numbers
+- **Context Support** - Full context.Context support for cancellation and timeouts
+- **Well Tested** - Extensive test coverage with examples
 
 ## Installation
 
@@ -313,10 +313,10 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ## Support
 
-- 📧 Email: support@checkhim.tech
-- 🌐 Website: [https://checkhim.tech](https://checkhim.tech)
-- 📖 Documentation: [https://docs.checkhim.tech](https://docs.checkhim.tech)
-- 🐛 Issues: [GitHub Issues](https://github.com/checkhim/go-sdk/issues)
+- Email: support@checkhim.tech
+- Website: [https://checkhim.tech](https://checkhim.tech)
+- Documentation: [https://docs.checkhim.tech](https://docs.checkhim.tech)
+- Issues: [GitHub Issues](https://github.com/checkhim/go-sdk/issues)
 
 ## Changelog
 
