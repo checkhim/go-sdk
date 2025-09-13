@@ -31,7 +31,7 @@ func TestIntegration_Verify(t *testing.T) {
 
 		require.NoError(t, err)
 		assert.NotNil(t, result)
-		
+
 		// Log the result for debugging
 		t.Logf("Result: Valid=%v, Carrier=%s", result.Valid, result.Carrier)
 	})
@@ -46,7 +46,7 @@ func TestIntegration_Verify(t *testing.T) {
 
 		require.NoError(t, err)
 		assert.NotNil(t, result)
-		
+
 		t.Logf("Result: Valid=%v, Carrier=%s", result.Valid, result.Carrier)
 	})
 
