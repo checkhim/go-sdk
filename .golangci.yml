@@ -1,0 +1,81 @@
+run:
+  timeout: 5m
+  issues-exit-code: 1
+  tests: true
+
+output:
+  format: colored-line-number
+  print-issued-lines: true
+  print-linter-name: true
+
+linters-settings:
+  errcheck:
+    check-type-assertions: true
+    check-blank: true
+  
+  goconst:
+    min-len: 3
+    min-occurrences: 3
+  
+  gocritic:
+    enabled-tags:
+      - diagnostic
+      - performance
+      - style
+  
+  gofmt:
+    simplify: true
+  
+  goimports:
+    local-prefixes: github.com/checkhim/go-sdk
+  
+  revive:
+    min-confidence: 0.8
+  
+  govet:
+    check-shadowing: true
+  
+  misspell:
+    locale: US
+  
+  unused:
+    check-exported: false
+
+linters:
+  enable:
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - typecheck
+    - unused
+    - gofmt
+    - goimports
+    - misspell
+    - revive
+    - gosec
+    - goconst
+    - gocritic
+    - stylecheck
+
+  disable:
+    - funlen        # função muito longa pode ser aceitável
+    - gomnd         # magic numbers podem ser aceitáveis
+    - dupl          # duplicação pode ser aceitável em testes
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - gosec   # security checks menos rigorosos para testes
+        - revive  # style checks menos rigorosos para testes
+    
+    - path: examples/
+      linters:
+        - errcheck  # exemplos podem não tratar todos os erros
+        - gosec     # exemplos podem ter código menos seguro
+
+  max-issues-per-linter: 0
+  max-same-issues: 0
+  new: false
