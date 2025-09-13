@@ -92,11 +92,12 @@ jobs:
       with:
         go-version: 1.21.x
 
-    - name: Install Gosec
-      run: go install github.com/securecodewarrior/gosec/v2/cmd/gosec@latest
+    - name: Download Gosec
+      run: |
+        curl -sfL https://raw.githubusercontent.com/securecodewarrior/gosec/master/install.sh | sh -s -- -b $(go env GOPATH)/bin latest
 
     - name: Run Gosec Security Scanner
-      run: gosec ./...
+      run: $(go env GOPATH)/bin/gosec ./...
       continue-on-error: true
 
   build:
