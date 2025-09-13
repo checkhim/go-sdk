@@ -1,0 +1,50 @@
+version: 1
+
+before:
+  hooks:
+    - go mod tidy
+    - go test ./...
+
+builds:
+  - skip: true
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'
+      - '^chore:'
+      - '^ci:'
+
+release:
+  github:
+    owner: checkhim
+    name: go-sdk
+  
+  name_template: "Release {{.Tag}}"
+  
+  header: |
+    ## CheckHim Go SDK {{.Tag}}
+    
+    Thank you for using CheckHim Go SDK!
+    
+    ### Installation
+    
+    ```bash
+    go get github.com/checkhim/go-sdk@{{.Tag}}
+    ```
+  
+  footer: |
+    ### Full Changelog
+    
+    **Full Changelog**: https://github.com/checkhim/go-sdk/compare/{{.PreviousTag}}...{{.Tag}}
+    
+    ---
+    
+    Questions? Join our [Discord](https://discord.gg/checkhim) or check our [documentation](https://checkhim.tech/docs/introduction)
+    
+    Found a bug? Please [report it](https://github.com/checkhim/go-sdk/issues/new/choose)
+
+  draft: false
+  prerelease: auto
