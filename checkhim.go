@@ -13,7 +13,6 @@
 //		log.Fatal(err)
 //	}
 //	fmt.Printf("Valid: %v, Carrier: %s\n", result.Valid, result.Carrier)
-//
 package checkhim
 
 import (
@@ -29,10 +28,10 @@ import (
 const (
 	// DefaultBaseURL is the default base URL for the CheckHim API
 	DefaultBaseURL = "http://api.checkhim.tech"
-	
+
 	// DefaultTimeout is the default timeout for HTTP requests
 	DefaultTimeout = 30 * time.Second
-	
+
 	// APIVersion is the current API version
 	APIVersion = "v1"
 )
@@ -48,10 +47,10 @@ type Client struct {
 type Config struct {
 	// BaseURL is the base URL for the CheckHim API (optional)
 	BaseURL string
-	
+
 	// Timeout is the timeout for HTTP requests (optional)
 	Timeout time.Duration
-	
+
 	// HTTPClient is a custom HTTP client (optional)
 	HTTPClient *http.Client
 }
@@ -62,7 +61,7 @@ func New(apiKey string, configs ...Config) *Client {
 		BaseURL: DefaultBaseURL,
 		Timeout: DefaultTimeout,
 	}
-	
+
 	if len(configs) > 0 {
 		if configs[0].BaseURL != "" {
 			config.BaseURL = configs[0].BaseURL
@@ -74,14 +73,14 @@ func New(apiKey string, configs ...Config) *Client {
 			config.HTTPClient = configs[0].HTTPClient
 		}
 	}
-	
+
 	httpClient := config.HTTPClient
 	if httpClient == nil {
 		httpClient = &http.Client{
 			Timeout: config.Timeout,
 		}
 	}
-	
+
 	return &Client{
 		apiKey:     apiKey,
 		baseURL:    config.BaseURL,
@@ -100,7 +99,7 @@ type VerifyRequest struct {
 type internalVerifyRequest struct {
 	// Number is the phone number to verify
 	Number string `json:"number"`
-	
+
 	// Type is always "frontend" for this SDK
 	Type string `json:"type"`
 }
@@ -109,7 +108,7 @@ type internalVerifyRequest struct {
 type VerifyResponse struct {
 	// Carrier is the name of the mobile carrier
 	Carrier string `json:"carrier"`
-	
+
 	// Valid indicates whether the phone number is valid and active
 	Valid bool `json:"valid"`
 }
@@ -118,10 +117,10 @@ type VerifyResponse struct {
 type ErrorResponse struct {
 	// Error is the error message
 	Error string `json:"error"`
-	
+
 	// Code is the error code
 	Code string `json:"code,omitempty"`
-	
+
 	// Details provides additional error details
 	Details map[string]interface{} `json:"details,omitempty"`
 }
@@ -156,38 +155,38 @@ func (c *Client) VerifyWithContext(ctx context.Context, req VerifyRequest) (*Ver
 			Code:       "invalid_request",
 		}
 	}
-	
+
 	internalReq := internalVerifyRequest{
 		Number: req.Number,
 		Type:   "frontend",
 	}
-	
+
 	reqBody, err := json.Marshal(internalReq)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal request: %w", err)
 	}
-	
+
 	url := fmt.Sprintf("%s/api/verify", c.baseURL)
 	httpReq, err := http.NewRequestWithContext(ctx, "POST", url, bytes.NewReader(reqBody))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create request: %w", err)
 	}
-	
+
 	httpReq.Header.Set("Authorization", "Bearer "+c.apiKey)
 	httpReq.Header.Set("Content-Type", "application/json")
 	httpReq.Header.Set("User-Agent", "checkhim-go-sdk/1.0")
-	
+
 	resp, err := c.httpClient.Do(httpReq)
 	if err != nil {
 		return nil, fmt.Errorf("failed to execute request: %w", err)
 	}
 	defer resp.Body.Close()
-	
+
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("failed to read response body: %w", err)
 	}
-	
+
 	if resp.StatusCode != http.StatusOK {
 		var errorResp ErrorResponse
 		if err := json.Unmarshal(body, &errorResp); err == nil {
@@ -198,17 +197,17 @@ func (c *Client) VerifyWithContext(ctx context.Context, req VerifyRequest) (*Ver
 				Details:    errorResp.Details,
 			}
 		}
-		
+
 		return nil, &APIError{
 			StatusCode: resp.StatusCode,
 			Message:    string(body),
 		}
 	}
-	
+
 	var verifyResp VerifyResponse
 	if err := json.Unmarshal(body, &verifyResp); err != nil {
 		return nil, fmt.Errorf("failed to unmarshal response: %w", err)
 	}
-	
+
 	return &verifyResp, nil
 }
