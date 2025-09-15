@@ -36,6 +36,24 @@ const (
 	APIVersion = "v1"
 )
 
+// Códigos de status de entrega (sucesso)
+const (
+	DeliveryStatusDeliveredToHandset = "DELIVERED_TO_HANDSET"
+)
+
+// Códigos de erro (sandbox / produção)
+const (
+	ErrorCodeRejectedNetwork          = "REJECTED_NETWORK"
+	ErrorCodeRejectedPrefixMissing    = "REJECTED_PREFIX_MISSING"
+	ErrorCodeRejectedFormat           = "REJECTED_FORMAT"
+	ErrorCodeRejectedSubscriberAbsent = "REJECTED_SUBSCRIBER_ABSENT"
+	ErrorCodeRejectedUnknownSubscriber = "REJECTED_UNKNOWN_SUBSCRIBER"
+	ErrorCodeRejectedUndeliverable    = "REJECTED_UNDELIVERABLE"
+	ErrorCodeUndeliverableNotDelivered = "UNDELIVERABLE_NOT_DELIVERED"
+	ErrorCodeTemporaryFailure         = "TEMPORARY_FAILURE"
+	ErrorCodeServiceUnavailable       = "SERVICE_UNAVAILABLE"
+)
+
 // Client represents a CheckHim API client
 type Client struct {
 	apiKey     string
@@ -111,6 +129,9 @@ type VerifyResponse struct {
 
 	// Valid indicates whether the phone number is valid and active
 	Valid bool `json:"valid"`
+
+	// Status (opcional) - quando disponível, ex: "DELIVERED_TO_HANDSET"
+	Status string `json:"status,omitempty"`
 }
 
 // ErrorResponse represents an error response from the API
@@ -139,6 +160,38 @@ func (e *APIError) Error() string {
 		return fmt.Sprintf("checkhim: %s (code: %s, status: %d)", e.Message, e.Code, e.StatusCode)
 	}
 	return fmt.Sprintf("checkhim: %s (status: %d)", e.Message, e.StatusCode)
+}
+
+// IsTemporary indica se o erro é temporário e pode ser re-tentado
+func (e *APIError) IsTemporary() bool {
+	switch e.Code {
+	case ErrorCodeTemporaryFailure, ErrorCodeServiceUnavailable:
+		return true
+	}
+	return false
+}
+
+// IsNumberInvalid indica erros de formato/prefixo/número inválido
+func (e *APIError) IsNumberInvalid() bool {
+	switch e.Code {
+	case ErrorCodeRejectedFormat,
+		ErrorCodeRejectedPrefixMissing:
+		return true
+	}
+	return false
+}
+
+// IsNetworkRelated indica erros relacionados à rede/assinante
+func (e *APIError) IsNetworkRelated() bool {
+	switch e.Code {
+	case ErrorCodeRejectedNetwork,
+		ErrorCodeRejectedSubscriberAbsent,
+		ErrorCodeRejectedUnknownSubscriber,
+		ErrorCodeRejectedUndeliverable,
+		ErrorCodeUndeliverableNotDelivered:
+		return true
+	}
+	return false
 }
 
 // Verify verifies a phone number using the CheckHim API

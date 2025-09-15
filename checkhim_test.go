@@ -167,6 +167,30 @@ func TestClient_Verify(t *testing.T) {
 		assert.Nil(t, result)
 		assert.Contains(t, err.Error(), "failed to unmarshal response")
 	})
+
+	t.Run("sandbox REJECTED_NETWORK error", func(t *testing.T) {
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusBadRequest)
+			json.NewEncoder(w).Encode(ErrorResponse{
+				Error: "verification failed: Network is forbidden (code: 6)",
+				Code:  ErrorCodeRejectedNetwork,
+			})
+		}))
+		defer server.Close()
+
+		client := New("test-api-key", Config{BaseURL: server.URL})
+		result, err := client.Verify(VerifyRequest{Number: "244921000111"})
+
+		require.Error(t, err)
+		assert.Nil(t, result)
+
+		var apiErr *APIError
+		require.ErrorAs(t, err, &apiErr)
+		assert.Equal(t, 400, apiErr.StatusCode)
+		assert.Equal(t, ErrorCodeRejectedNetwork, apiErr.Code)
+		assert.True(t, apiErr.IsNetworkRelated())
+		assert.False(t, apiErr.IsTemporary())
+	})
 }
 
 func TestClient_VerifyWithContext(t *testing.T) {
