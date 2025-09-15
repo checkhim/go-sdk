@@ -43,15 +43,15 @@ const (
 
 // Códigos de erro (sandbox / produção)
 const (
-	ErrorCodeRejectedNetwork          = "REJECTED_NETWORK"
-	ErrorCodeRejectedPrefixMissing    = "REJECTED_PREFIX_MISSING"
-	ErrorCodeRejectedFormat           = "REJECTED_FORMAT"
-	ErrorCodeRejectedSubscriberAbsent = "REJECTED_SUBSCRIBER_ABSENT"
+	ErrorCodeRejectedNetwork           = "REJECTED_NETWORK"
+	ErrorCodeRejectedPrefixMissing     = "REJECTED_PREFIX_MISSING"
+	ErrorCodeRejectedFormat            = "REJECTED_FORMAT"
+	ErrorCodeRejectedSubscriberAbsent  = "REJECTED_SUBSCRIBER_ABSENT"
 	ErrorCodeRejectedUnknownSubscriber = "REJECTED_UNKNOWN_SUBSCRIBER"
-	ErrorCodeRejectedUndeliverable    = "REJECTED_UNDELIVERABLE"
+	ErrorCodeRejectedUndeliverable     = "REJECTED_UNDELIVERABLE"
 	ErrorCodeUndeliverableNotDelivered = "UNDELIVERABLE_NOT_DELIVERED"
-	ErrorCodeTemporaryFailure         = "TEMPORARY_FAILURE"
-	ErrorCodeServiceUnavailable       = "SERVICE_UNAVAILABLE"
+	ErrorCodeTemporaryFailure          = "TEMPORARY_FAILURE"
+	ErrorCodeServiceUnavailable        = "SERVICE_UNAVAILABLE"
 )
 
 // Client represents a CheckHim API client
