@@ -24,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Detailed `VerifyResponse` with validation results
 - `APIError` type for structured error handling
 
-## [1.0.0] - 2025-01-XX
+## [1.0.0] - 2025-09-01
 
 ### Added
 - Initial stable release
